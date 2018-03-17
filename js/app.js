@@ -8,6 +8,24 @@ let app = new Vue({
   }
 });
 
+function checkForItemInStorage(item) {
+  if (typeof(Storage) === "undefined") {
+    return false;
+  }
+  if (!localStorage.getItem(item)) {
+    return false;
+  }
+  return true;
+}
+
+function getUserFromStorage() {
+  if (!checkForItemInStorage("token")) {
+    return undefined;
+  }
+
+  return gluipertje.user.byToken(getItem("token"));
+}
+
 function checkVisible(elm) {
   var rect = elm.getBoundingClientRect();
   var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
@@ -41,5 +59,9 @@ function refreshMessages() {
 }
 
 $(document).ready(function() {
+  user = getUserFromStorage();
+  if (!user) {
+    $("#loginModal").modal();
+  }
   setInterval(refreshMessages, 1000);
 });
