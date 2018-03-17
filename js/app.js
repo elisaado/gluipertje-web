@@ -8,6 +8,7 @@ let app = new Vue({
   }
 });
 
+// Checks if an item exists in the local storage
 function checkForItemInStorage(item) {
   if (typeof(Storage) === "undefined") {
     return false;
@@ -18,12 +19,21 @@ function checkForItemInStorage(item) {
   return true;
 }
 
+// Gets the user from the storage by its token
 function getUserFromStorage() {
   if (!checkForItemInStorage("token")) {
     return undefined;
   }
-
   return gluipertje.user.byToken(getItem("token"));
+}
+
+// Sends a message but checks a lot of stuff first :D
+function sendMessage() {
+  user = getUserFromStorage();
+  if (!user) {
+    $("#loginModal").modal();
+  }
+  return false;
 }
 
 function checkVisible(elm) {
@@ -31,7 +41,6 @@ function checkVisible(elm) {
   var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
-
 
 function refreshMessages() {
   console.log("Fetching messages...");
@@ -51,7 +60,7 @@ function refreshMessages() {
         // Check if the user is already at the bottom of the page so that if they are reading older messages it doesn't scroll down when a new message appears
         if (checkVisible(document.getElementById("footer"))) {
           $("html, body").animate({
-            scrollTop: $(document).height()*10
+            scrollTop: $(document).height() * 10
           }, 2000);
         }
       }
@@ -61,7 +70,13 @@ function refreshMessages() {
 $(document).ready(function() {
   user = getUserFromStorage();
   if (!user) {
+    $("#userDropdown, #userDropdownItems").hide();
     $("#loginModal").modal();
+    $("#messageInput, #messageButton").prop("disabled", true);
+    setInterval(refreshMessages, 2000);
+  } else {
+    $("#messageButton").click(sendMessage);
+    app.user = user;
+    setInterval(refreshMessages, 1000);
   }
-  setInterval(refreshMessages, 1000);
 });
