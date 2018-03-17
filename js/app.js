@@ -8,6 +8,13 @@ let app = new Vue({
   }
 });
 
+function checkVisible(elm) {
+  var rect = elm.getBoundingClientRect();
+  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+}
+
+
 function refreshMessages() {
   console.log("Fetching messages...");
   let messages = [];
@@ -19,15 +26,15 @@ function refreshMessages() {
       }
 
       // Check if there are new messages
-      if (messages.length != app.messages.length || app.messages.length == 0) {
+      if (messages.length != app.messages.length) {
         messages.reverse();
         app.messages = messages;
 
         // Check if the user is already at the bottom of the page so that if they are reading older messages it doesn't scroll down when a new message appears
-        if ($(document).height() - $(window).scrollTop() < 800) { // This feels like a hack
-          $("html").animate({
-            scrollTop: $(document).height()
-          }, "slow");
+        if (checkVisible(document.getElementById("footer"))) {
+          $("html, body").animate({
+            scrollTop: $(document).height()*10
+          }, 2000);
         }
       }
     });
