@@ -8,6 +8,9 @@ let app = new Vue({
   }
 });
 
+// fetch messages interval so I can later clear it again
+let refreshMessagesInterval;
+
 // Checks if an item exists in the local storage
 function checkForItemInStorage(item) {
   if (typeof(Storage) === "undefined") {
@@ -19,20 +22,32 @@ function checkForItemInStorage(item) {
   return true;
 }
 
-// Gets the user from the storage by its token
-function getUserFromStorage() {
-  if (!checkForItemInStorage("token")) {
-    return undefined;
-  }
-  return gluipertje.user.byToken(getItem("token"));
+// "Logs in"
+function login() {
+  gluipertje.user.revokeToken($("#username").val(), $("#password").val())
+    .then(function(token) {
+      gluipertje.user.byToken(token)
+        .then(function(user) {
+          if (user.id == 0) {
+            return false;
+          }
+          app.user = user;
+          localStorage.setItem("token", token);
+          $("#userDropdown, #userDropdownItems").show();
+          $("#messageInput, #messageButton").prop("disabled", false);
+          clearInterval(refreshMessagesInterval);
+          refreshMessagesInterval = setInterval(refreshMessages, 1000);
+        });
+    });
+  return false;
 }
 
 // Sends a message but checks a lot of stuff first :D
 function sendMessage() {
-  user = getUserFromStorage();
-  if (!user) {
-    $("#loginModal").modal();
+  if (app.user.id == 0 || !localStorage.getItem("token")) {
+    return false;
   }
+  gluipertje.message.send(localStorage.getItem("token"), $("#messageInput").val());
   return false;
 }
 
@@ -73,15 +88,19 @@ function refreshMessages() {
 }
 
 $(document).ready(function() {
-  user = getUserFromStorage();
-  if (!user) {
+  let token = localStorage.getItem("token");
+
+  if (!token) {
     $("#userDropdown, #userDropdownItems").hide();
     $("#loginModal").modal();
     $("#messageInput, #messageButton").prop("disabled", true);
-    setInterval(refreshMessages, 2000);
+    refreshMessagesInterval = setInterval(refreshMessages, 2000);
   } else {
     $("#messageButton").click(sendMessage);
-    app.user = user;
-    setInterval(refreshMessages, 1000);
+    gluipertje.user.byToken(token)
+      .then(function(user) {
+        app.user = user;
+      });
+    refreshMessagesInterval = setInterval(refreshMessages, 1000);
   }
 });
