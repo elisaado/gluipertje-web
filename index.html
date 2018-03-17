@@ -71,9 +71,13 @@
     </div>
     <!-- footer / message input box -->
     <nav id="footer" class="navbar navbar-light bg-light">
-      <form class="form-inline" id="sendForm">
-        <input class="form-control mr-sm-2" id="messageInput" type="text" placeholder="Message" aria-label="Message">
-        <button class="btn btn-outline-success my-2 my-sm-0" id="messageButton" type="button">Send</button>
+      <form class="mx-2 my-auto d-inline w-100">
+        <div class="input-group">
+          <textarea id="messageInput" class="form-control" placeholder="Message"></textarea>
+          <span class="input-group-append">
+            <button id="messageButton" class="btn btn-outline-primary" type="button">Send</button>
+          </span>
+        </div>
       </form>
     </nav>
   </div>
