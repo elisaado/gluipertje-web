@@ -37,6 +37,7 @@ function login() {
           $("#messageInput, #messageButton").prop("disabled", false);
           clearInterval(refreshMessagesInterval);
           refreshMessagesInterval = setInterval(refreshMessages, 1000);
+          $("loginModal").modal("toggle");
         });
     });
   return false;
@@ -99,7 +100,14 @@ $(document).ready(function() {
     $("#messageButton").click(sendMessage);
     gluipertje.user.byToken(token)
       .then(function(user) {
-        app.user = user;
+        if (user.id) {
+          app.user = user;
+        } else {
+          $("#userDropdown, #userDropdownItems").hide();
+          $("#loginModal").modal();
+          $("#messageInput, #messageButton").prop("disabled", true);
+          refreshMessagesInterval = setInterval(refreshMessages, 2000);
+        }
       });
     refreshMessagesInterval = setInterval(refreshMessages, 1000);
   }
