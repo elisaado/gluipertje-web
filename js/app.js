@@ -42,6 +42,11 @@ function checkVisible(elm) {
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
 
+// Escapes html (thanks bjornd from SO)
+function escapeHtml(html) {
+  return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
 function refreshMessages() {
   console.log("Fetching messages...");
   let messages = [];
@@ -49,7 +54,7 @@ function refreshMessages() {
   gluipertje.message.all()
     .then(function(rawMessages) {
       for (let rawMessage of rawMessages) {
-        messages.push(`<div class="card mx-auto"><div class="card-body text-left"><h5 class="card-title">${rawMessage.from.nickname}</h5><h6 class="card-subtitle mb-2 text-muted">(@${rawMessage.from.username})</h6><br><p class="card-text">${rawMessage.body}</p></div></div><br>`);
+        messages.push(`<div class="card mx-auto"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6><br><p class="card-text">${escapeHtml(rawMessage.body)}</p></div></div><br>`);
       }
 
       // Check if there are new messages
