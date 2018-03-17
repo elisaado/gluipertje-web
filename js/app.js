@@ -8,6 +8,28 @@ let app = new Vue({
   }
 });
 
+// Make login submit on enter
+$('#password').keypress(function(e) {
+  if (e.which == 13) {
+    $(this).blur();
+    $('#submitLogin').focus().click();
+  }
+});
+$('#username').keypress(function(e) {
+  if (e.which == 13) {
+    $(this).blur();
+    $('#submitLogin').focus().click();
+  }
+});
+
+// Make message send box submit on enter
+$('#messageInput').keypress(function(e) {
+  if (e.which == 13) {
+    $(this).blur();
+    $('#messageButton').focus().click();
+  }
+});
+
 // fetch messages interval so I can later clear it again
 let refreshMessagesInterval;
 
@@ -28,7 +50,7 @@ function login() {
     .then(function(token) {
       gluipertje.user.byToken(token)
         .then(function(user) {
-          if (user.id == 0) {
+          if (!user.id) {
             return false;
           }
           app.user = user;
@@ -37,7 +59,7 @@ function login() {
           $("#messageInput, #messageButton").prop("disabled", false);
           clearInterval(refreshMessagesInterval);
           refreshMessagesInterval = setInterval(refreshMessages, 1000);
-          $("loginModal").modal("toggle");
+          $("#loginModal").modal("hide");
         });
     });
   return false;
@@ -102,6 +124,7 @@ $(document).ready(function() {
       .then(function(user) {
         if (user.id) {
           app.user = user;
+          refreshMessagesInterval = setInterval(refreshMessages, 1000);
         } else {
           $("#userDropdown, #userDropdownItems").hide();
           $("#loginModal").modal();
@@ -109,6 +132,5 @@ $(document).ready(function() {
           refreshMessagesInterval = setInterval(refreshMessages, 2000);
         }
       });
-    refreshMessagesInterval = setInterval(refreshMessages, 1000);
   }
 });
