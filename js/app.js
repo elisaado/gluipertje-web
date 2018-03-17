@@ -54,7 +54,7 @@ function refreshMessages() {
   gluipertje.message.all()
     .then(function(rawMessages) {
       for (let rawMessage of rawMessages) {
-        messages.push(`<div class="card mx-auto"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6><br><p class="card-text">${escapeHtml(rawMessage.body)}</p></div></div><br>`);
+        messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6><br><p class="card-text">${escapeHtml(rawMessage.body)}</p></div></div><br>`);
       }
 
       // Check if there are new messages
