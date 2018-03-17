@@ -65,6 +65,12 @@ function login() {
   return false;
 }
 
+// THIS ugly son of a bitch LOGS OUT and basically you are a fucking idiot, how? ...Just watch The free video
+function logOut() {
+  localStorage.clear();
+  window.location.href = "http://gluipertje.ga";
+}
+
 // Sends a message but checks a lot of stuff first :D
 function sendMessage() {
   if (app.user.id == 0 || !localStorage.getItem("token")) {
