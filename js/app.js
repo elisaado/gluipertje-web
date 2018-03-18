@@ -91,6 +91,7 @@ function register() {
         $("#messageInput, #messageButton").prop("disabled", false);
         clearInterval(refreshMessagesInterval);
         refreshMessagesInterval = setInterval(refreshMessages, 1000);
+        $("#messageButton").click(sendMessage);
         $("#loginModal").modal("hide");
       });
   });
@@ -111,6 +112,7 @@ function login() {
           $("#messageInput, #messageButton").prop("disabled", false);
           clearInterval(refreshMessagesInterval);
           refreshMessagesInterval = setInterval(refreshMessages, 1000);
+          $("#messageButton").click(sendMessage);
           $("#loginModal").modal("hide");
         });
     });
