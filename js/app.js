@@ -131,7 +131,14 @@ function sendMessage() {
     return false;
   }
   gluipertje.message.send(localStorage.getItem("token"), $("#messageInput").val());
+  app.messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(app.user.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(app.user.username)})</h6><br><p class="card-text">${escapeHtml($("#messageInput").val())}</p></div></div><br>`);
+  if (checkVisible(document.getElementById("footer"))) {
+    $("html, body").animate({
+      scrollTop: $(document).height() * app.messages.length
+    }, 2000);
+  }
   $("#messageInput").val('');
+
   return false;
 }
 
@@ -164,7 +171,7 @@ function refreshMessages() {
         // Check if the user is already at the bottom of the page so that if they are reading older messages it doesn't scroll down when a new message appears
         if (checkVisible(document.getElementById("footer"))) {
           $("html, body").animate({
-            scrollTop: $(document).height() * 10
+            scrollTop: $(document).height() * app.messages.length
           }, 2000);
         }
       }
