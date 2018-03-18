@@ -9,13 +9,13 @@ let app = new Vue({
 });
 
 // Make login submit on enter
-$('#password').keypress(function(e) {
+$('#loginPassword').keypress(function(e) {
   if (e.which == 13) {
     $(this).blur();
     $('#submitLogin').focus().click();
   }
 });
-$('#username').keypress(function(e) {
+$('#loginUsername').keypress(function(e) {
   if (e.which == 13) {
     $(this).blur();
     $('#submitLogin').focus().click();
@@ -44,9 +44,61 @@ function checkForItemInStorage(item) {
   return true;
 }
 
+// Checks if a username is available
+function checkUsername() {
+  $("#alert").show();
+  $("#alert").removeClass("alert-success").removeClass("alert-danger");
+  console.log("checking");
+  if ($("#registerUsername").val().length < 3) {
+    $("#alertText").html("This username is too short");
+    $("#alert").addClass("alert-danger").alert();
+    return;
+  }
+
+  gluipertje.user.all()
+    .then(function(users) {
+      let a = true;
+      console.log(users);
+      for (let user of users) {
+        if (user.username == $("#registerUsername").val()) {
+          a = false;
+        }
+      }
+
+      if (a) {
+        $("#alertText").html("This username is available");
+        $("#alert").addClass("alert-success");
+      } else {
+        $("#alertText").html("This username is not available");
+        $("#alert").addClass("alert-danger");
+      }
+      $("#alert").alert();
+    });
+}
+
+// Hey, did you know this function CAN MAKE AN ACCOUNT FOR YOU?
+// I'm sorry idk what to comment
+function register() {
+  gluipertje.user.create($("#registerNickname").val(), $("#registerUsername").val(), $("#registerPassword").val()).then(function(user) {
+    gluipertje.user.byToken(user.token)
+      .then(function(safeUser) {
+        if (!safeUser.id) {
+          return false;
+        }
+        app.user = safeUser;
+        localStorage.setItem("token", user.token);
+        $("#userDropdown").show();
+        $("#messageInput, #messageButton").prop("disabled", false);
+        clearInterval(refreshMessagesInterval);
+        refreshMessagesInterval = setInterval(refreshMessages, 1000);
+        $("#loginModal").modal("hide");
+      });
+  });
+}
+
 // "Logs in"
 function login() {
-  gluipertje.user.revokeToken($("#username").val(), $("#password").val())
+  gluipertje.user.revokeToken($("#loginUsername").val(), $("#loginPassword").val())
     .then(function(token) {
       gluipertje.user.byToken(token)
         .then(function(user) {
@@ -55,7 +107,7 @@ function login() {
           }
           app.user = user;
           localStorage.setItem("token", token);
-          $("#userDropdown, #userDropdownItems").show();
+          $("#userDropdown").show();
           $("#messageInput, #messageButton").prop("disabled", false);
           clearInterval(refreshMessagesInterval);
           refreshMessagesInterval = setInterval(refreshMessages, 1000);
@@ -120,7 +172,7 @@ $(document).ready(function() {
   let token = localStorage.getItem("token");
 
   if (!token) {
-    $("#userDropdown, #userDropdownItems").hide();
+    $("#userDropdown").hide();
     $("#loginModal").modal();
     $("#messageInput, #messageButton").prop("disabled", true);
     refreshMessagesInterval = setInterval(refreshMessages, 2000);
@@ -132,11 +184,12 @@ $(document).ready(function() {
           app.user = user;
           refreshMessagesInterval = setInterval(refreshMessages, 1000);
         } else {
-          $("#userDropdown, #userDropdownItems").hide();
+          $("#userDropdown").hide();
           $("#loginModal").modal();
           $("#messageInput, #messageButton").prop("disabled", true);
           refreshMessagesInterval = setInterval(refreshMessages, 2000);
         }
       });
   }
+  $("#alert").hide();
 });

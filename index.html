@@ -22,14 +22,53 @@
             <div class="modal-body">
               To send messages, you need to log in first.
               <hr>
-              <form>
-                <input placeholder="Username" type="text" class="form-control mb-3" id="username">
-                <input placeholder="Password" type="password" class="form-control" id="password">
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="submitLogin" onclick="login()">Log in</button>
+              <div id="accordion">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Log In
+                    </button>
+                    </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                    <div class="card-body">
+                      <form>
+                        <input placeholder="Username" type="text" class="form-control mb-3" id="loginUsername">
+                        <input placeholder="Password" type="password" class="form-control mb-3" id="loginPassword">
+                      </form>
+                      <button type="button" class="btn btn-primary" id="submitLogin" onclick="login()">Log in</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Register
+                    </button>
+                    </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                      <div class="alert mb-3" id="alert" role="alert">
+                      <div id="alertText"></div>
+                    </div>
+                      <form>
+                        <input placeholder="Nickname" type="text" class="form-control mb-3" id="registerNickname">
+                        <div class="input-group mb-3">
+                          <input placeholder="Username" type="text" class="form-control" id="registerUsername">
+                          <div class="input-group-append">
+                            <button onclick="checkUsername()" class="btn btn-outline-secondary" type="button">Check availability</button>
+                          </div>
+                        </div>
+                        <input placeholder="Password" type="password" class="form-control mb-3" id="registerPassword">
+                      </form>
+                      <button type="button" class="btn btn-primary" id="submitLogin" onclick="register()">Register</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
