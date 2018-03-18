@@ -27,6 +27,7 @@ $('#messageInput').keypress(function(e) {
   if (e.which == 13) {
     $(this).blur();
     $('#messageButton').focus().click();
+    return false;
   }
 });
 
@@ -127,7 +128,7 @@ function logOut() {
 
 // Sends a message but checks a lot of stuff first :D
 function sendMessage() {
-  if (app.user.id == 0 || !localStorage.getItem("token")) {
+  if (app.user.id == 0 || !localStorage.getItem("token") || $("#messageInput").val().length == 0) {
     return false;
   }
   gluipertje.message.send(localStorage.getItem("token"), $("#messageInput").val());
@@ -138,7 +139,7 @@ function sendMessage() {
     }, 2000);
   }
   $("#messageInput").val('');
-
+  $("#messageInput").focus().click();
   return false;
 }
 
