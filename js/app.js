@@ -131,6 +131,7 @@ function sendMessage() {
     return false;
   }
   gluipertje.message.send(localStorage.getItem("token"), $("#messageInput").val());
+  $("#messageInput").val('');
   return false;
 }
 
