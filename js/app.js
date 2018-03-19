@@ -213,6 +213,7 @@ $(document).ready(function() {
     .then(function(user) {
       if (user.id) {
         app.user = user;
+	$("#messageButton").click(sendMessage);
         refreshMessagesInterval = setInterval(refreshMessages, 1000);
       } else {
         localStorage.clear();
@@ -232,5 +233,4 @@ function scrollDown() {
     scrollTop: $(document).height() * app.messages.length
   }, 1000);
 }
-
 
