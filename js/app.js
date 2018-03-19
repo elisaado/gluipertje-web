@@ -174,7 +174,8 @@ function sendMessage() {
   if (app.user.id == 0 || !localStorage.getItem("token") || $("#messageInput").val().length == 0) {
     return false;
   }
-  gluipertje.message.send(localStorage.getItem("token"), $("#messageInput").val());
+  gluipertje.message.send(localStorage.getItem("token"), $("#messageInput").val().replace(/\n/g, "\\n"));
+
   app.messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(app.user.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(app.user.username)})</h6><br><p class="card-text">${escapeHtml($("#messageInput").val()).replace(/\n/g, "<br>")}</p></div></div><br>`);
   if (checkVisible(document.getElementById("footer"))) {
     $("html, body").animate({
@@ -183,6 +184,7 @@ function sendMessage() {
   }
   $("#messageInput").val('');
   $("#messageInput").focus().click();
+
   return false;
 }
 
