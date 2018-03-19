@@ -1,5 +1,21 @@
 let gluipertje = new Gluipertje("https://gluipertje.elisaado.com", 443);
 
+function checkVisible(elm) {
+  var rect = elm.getBoundingClientRect();
+  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+}
+
+function scrollDownButtonVisible() {
+  console.log("fired");
+
+  if (checkVisible(document.getElementById("footer"))) {
+    $("#scrollDownButton").hide(200);
+  } else {
+    $("#scrollDownButton").show(200);
+  }
+}
+
 let app = new Vue({
   el: '#app',
   data: {
@@ -160,12 +176,6 @@ function sendMessage() {
   return false;
 }
 
-function checkVisible(elm) {
-  var rect = elm.getBoundingClientRect();
-  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
-}
-
 // Escapes html (thanks bjornd from SO)
 function escapeHtml(html) {
   return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
@@ -223,12 +233,4 @@ function scrollDown() {
   }, 1000);
 }
 
-function scrollDownButtonVisible() {
-  console.log("fired");
 
-  if (checkVisible(document.getElementById("footer"))) {
-    $("#scrollDownButton").hide(200);
-  } else {
-    $("#scrollDownButton").show(200);
-  }
-}
