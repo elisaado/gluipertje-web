@@ -43,13 +43,22 @@ $('#loginUsername').keypress(function(e) {
   }
 });
 
-// Make message send box submit on enter
-$('#messageInput').keypress(function(e) {
-  if (e.which == 13) {
+
+var keys = {};
+
+// Make message send box submit on enter but not on shift enter
+$("#messageInput").keydown(function(e) {
+  keys[e.which] = true;
+  if (keys[13] && !keys[16]) {
     $(this).blur();
     $('#messageButton').focus().click();
     return false;
   }
+  return true;
+});
+$("#messageInput").keyup(function(e) {
+  delete keys[e.which];
+  return true;
 });
 
 // fetch messages interval so I can later clear it again
@@ -213,7 +222,7 @@ $(document).ready(function() {
     .then(function(user) {
       if (user.id) {
         app.user = user;
-	$("#messageButton").click(sendMessage);
+        $("#messageButton").click(sendMessage);
         refreshMessagesInterval = setInterval(refreshMessages, 1000);
       } else {
         localStorage.clear();
@@ -233,4 +242,3 @@ function scrollDown() {
     scrollTop: $(document).height() * app.messages.length
   }, 1000);
 }
-
