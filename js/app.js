@@ -85,6 +85,8 @@ function checkUsername() {
 // Hey, did you know this function CAN MAKE AN ACCOUNT FOR YOU?
 // I'm sorry idk what to comment
 function register() {
+  checkUsername();
+
   gluipertje.user.create($("#registerNickname").val(), $("#registerUsername").val(), $("#registerPassword").val()).then(function(user) {
     gluipertje.user.byToken(user.token)
       .then(function(safeUser) {
@@ -110,7 +112,17 @@ function login() {
       gluipertje.user.byToken(token)
         .then(function(user) {
           if (!user.id) {
-            return false;
+            console.log(user)
+            if (user == "Invalid token") {
+              $("#loginAlertText").html("The username and password do not match");
+              $("#loginAlert").addClass("alert-danger");
+              console.log("alert'd")
+            }
+            $("#loginAlert").show();
+
+            $("#loginAlert").alert();
+            console.log("alerted 2");
+            return;
           }
           app.user = user;
           localStorage.setItem("token", token);
@@ -187,28 +199,21 @@ function refreshMessages() {
 
 $(document).ready(function() {
   let token = localStorage.getItem("token");
+  gluipertje.user.byToken(token)
+    .then(function(user) {
+      if (user.id) {
+        app.user = user;
+        refreshMessagesInterval = setInterval(refreshMessages, 1000);
+      } else {
+        localStorage.clear();
+        $("#userDropdown").hide();
+        $("#loginModal").modal();
+        $("#messageInput, #messageButton").prop("disabled", true);
+        refreshMessagesInterval = setInterval(refreshMessages, 2000);
+      }
+    });
 
-  if (!token) {
-    $("#userDropdown").hide();
-    $("#loginModal").modal();
-    $("#messageInput, #messageButton").prop("disabled", true);
-    refreshMessagesInterval = setInterval(refreshMessages, 2000);
-  } else {
-    $("#messageButton").click(sendMessage);
-    gluipertje.user.byToken(token)
-      .then(function(user) {
-        if (user.id) {
-          app.user = user;
-          refreshMessagesInterval = setInterval(refreshMessages, 1000);
-        } else {
-          $("#userDropdown").hide();
-          $("#loginModal").modal();
-          $("#messageInput, #messageButton").prop("disabled", true);
-          refreshMessagesInterval = setInterval(refreshMessages, 2000);
-        }
-      });
-  }
-  $("#alert, #scrollDownButton").hide();
+  $("#alert, #loginAlert, #scrollDownButton").hide();
 });
 
 function scrollDown() {
@@ -222,7 +227,7 @@ function scrollDownButtonVisible() {
   console.log("fired");
 
   if (checkVisible(document.getElementById("footer"))) {
-    $("#scrollDownButton").hide(200);    
+    $("#scrollDownButton").hide(200);
   } else {
     $("#scrollDownButton").show(200);
   }
