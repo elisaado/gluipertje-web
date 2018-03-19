@@ -17,3 +17,11 @@
   color: white !important;
   background-color: #17a2b8 !important;
 }
+
+.btn-link {
+  color: #17a2b8 !important;
+}
+
+.btn-link:hover {
+  color: #1E8D9F !important;
+}
