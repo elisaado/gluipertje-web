@@ -193,7 +193,7 @@ function escapeHtml(html) {
   return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
-function refreshMessages() {
+function refreshMessages(callb) {
   console.log("Fetching messages...");
   let messages = [];
 
@@ -215,6 +215,9 @@ function refreshMessages() {
           }, 2000);
         }
       }
+      if (callb) {
+        callb();
+      }
     });
 }
 
@@ -226,14 +229,19 @@ $(document).ready(function() {
       if (user.id) {
         app.user = user;
         $("#messageButton").click(sendMessage);
-        refreshMessagesInterval = setInterval(refreshMessages, 1000);
+        interval = 1000;
       } else {
         localStorage.clear();
         $("#userDropdown").hide();
         $("#loginModal").modal();
         $("#messageInput, #messageButton").prop("disabled", true);
-        refreshMessagesInterval = setInterval(refreshMessages, 2000);
+        interval = 2000;
       }
+
+      // Only fetch messages once in the begin
+      refreshMessages(function() {
+        setTimeout(refreshMessagesInterval = setInterval(refreshMessages, interval), interval);
+      });
     });
 
   $("#alert, #loginAlert, #scrollDownButton").hide();
