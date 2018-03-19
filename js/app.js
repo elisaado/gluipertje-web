@@ -176,7 +176,8 @@ function sendMessage() {
   }
   gluipertje.message.send(localStorage.getItem("token"), $("#messageInput").val().replace(/\n/g, "\\n"));
 
-  app.messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(app.user.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(app.user.username)})</h6><br><p class="card-text">${escapeHtml($("#messageInput").val()).replace(/\n/g, "<br>")}</p></div></div><br>`);
+  refreshMessages(); // :)
+
   if (checkVisible(document.getElementById("footer"))) {
     $("html, body").animate({
       scrollTop: $(document).height() * app.messages.length
@@ -200,7 +201,19 @@ function refreshMessages(callb) {
   gluipertje.message.all()
     .then(function(rawMessages) {
       for (let rawMessage of rawMessages) {
-        messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6><br><p class="card-text">${escapeHtml(rawMessage.body).replace(/\\n/g, "<br>")}</p></div></div><br>`);
+        words = escapeHtml(rawMessage.body).split(" ")
+
+        for (i = 0; i < words.length; i++) {
+          match = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.exec(words[i])
+          if (match) {
+            console.log(words[i].replace(match[0], `<a href="${match[0]}">${match[0]}</a>`));
+            words[i] = words[i].replace(match[0], `<a href="${match[0]}">${match[0]}</a>`)
+          }
+        }
+
+        rawMessage.body = words.join(" ").replace(/\\n/g, "<br>")
+
+        messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6><br><p class="card-text">${rawMessage.body}</p></div></div><br>`);
       }
 
       // Check if there are new messages
