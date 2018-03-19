@@ -4,6 +4,7 @@
 }
 
 .btn-primary:hover {
+  color: white;
   background-color: #1E8D9F !important;
 }
 
