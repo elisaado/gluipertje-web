@@ -1,4 +1,5 @@
 let gluipertje = new Gluipertje("https://gluipertje.elisaado.com", 443);
+// let gluipertje = new Gluipertje("http://0.0.0.0", 8000); // Test server
 
 function checkVisible(elm) {
   var rect = elm.getBoundingClientRect();
@@ -174,7 +175,7 @@ function sendMessage() {
     return false;
   }
   gluipertje.message.send(localStorage.getItem("token"), $("#messageInput").val());
-  app.messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(app.user.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(app.user.username)})</h6><br><p class="card-text">${escapeHtml($("#messageInput").val())}</p></div></div><br>`);
+  app.messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(app.user.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(app.user.username)})</h6><br><p class="card-text">${escapeHtml($("#messageInput").val()).replace(/\n/g, "<br>")}</p></div></div><br>`);
   if (checkVisible(document.getElementById("footer"))) {
     $("html, body").animate({
       scrollTop: $(document).height() * app.messages.length
@@ -197,7 +198,7 @@ function refreshMessages() {
   gluipertje.message.all()
     .then(function(rawMessages) {
       for (let rawMessage of rawMessages) {
-        messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6><br><p class="card-text">${escapeHtml(rawMessage.body)}</p></div></div><br>`);
+        messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6><br><p class="card-text">${escapeHtml(rawMessage.body).replace(/\\n/g, "<br>")}</p></div></div><br>`);
       }
 
       // Check if there are new messages
