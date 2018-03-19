@@ -8,8 +8,6 @@ function checkVisible(elm) {
 }
 
 function scrollDownButtonVisible() {
-  console.log("fired");
-
   if (checkVisible(document.getElementById("footer"))) {
     $("#scrollDownButton").hide(200);
   } else {
@@ -80,7 +78,6 @@ function checkForItemInStorage(item) {
 function checkUsername() {
   $("#alert").show();
   $("#alert").removeClass("alert-success").removeClass("alert-danger");
-  console.log("checking");
   if ($("#registerUsername").val().length < 3) {
     $("#alertText").html("This username is too short");
     $("#alert").addClass("alert-danger").alert();
@@ -90,7 +87,6 @@ function checkUsername() {
   gluipertje.user.all()
     .then(function(users) {
       let a = true;
-      console.log(users);
       for (let user of users) {
         if (user.username == $("#registerUsername").val()) {
           a = false;
@@ -138,16 +134,13 @@ function login() {
       gluipertje.user.byToken(token)
         .then(function(user) {
           if (!user.id) {
-            console.log(user)
             if (user == "Invalid token") {
               $("#loginAlertText").html("The username and password do not match");
               $("#loginAlert").addClass("alert-danger");
-              console.log("alert'd")
             }
             $("#loginAlert").show();
 
             $("#loginAlert").alert();
-            console.log("alerted 2");
             return;
           }
           app.user = user;
@@ -195,7 +188,6 @@ function escapeHtml(html) {
 }
 
 function refreshMessages(callb) {
-  console.log("Fetching messages...");
   let messages = [];
 
   gluipertje.message.all()
@@ -206,7 +198,6 @@ function refreshMessages(callb) {
         for (i = 0; i < words.length; i++) {
           match = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.exec(words[i])
           if (match) {
-            console.log(words[i].replace(match[0], `<a href="${match[0]}">${match[0]}</a>`));
             words[i] = words[i].replace(match[0], `<a href="${match[0]}">${match[0]}</a>`)
           }
         }
