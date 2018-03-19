@@ -193,7 +193,8 @@ function refreshMessages(callb) {
   gluipertje.message.all()
     .then(function(rawMessages) {
       for (let rawMessage of rawMessages) {
-        words = escapeHtml(rawMessage.body).split(" ")
+        words = escapeHtml(rawMessage.body).split(/( |\\n)/)
+        console.log(words);
 
         for (i = 0; i < words.length; i++) {
           match = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.exec(words[i])
