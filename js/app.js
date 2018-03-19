@@ -5,6 +5,11 @@ let app = new Vue({
   data: {
     user: {},
     messages: []
+  },
+  mounted() {
+    $(window).scroll(
+      scrollDownButtonVisible
+    );
   }
 });
 
@@ -179,6 +184,7 @@ function refreshMessages() {
     });
 }
 
+
 $(document).ready(function() {
   let token = localStorage.getItem("token");
 
@@ -202,5 +208,22 @@ $(document).ready(function() {
         }
       });
   }
-  $("#alert").hide();
+  $("#alert, #scrollDownButton").hide();
 });
+
+function scrollDown() {
+  // Check if the user is already at the bottom of the page so that if they are reading older messages it doesn't scroll down when a new message appears
+  $("html, body").animate({
+    scrollTop: $(document).height() * app.messages.length
+  }, 1000);
+}
+
+function scrollDownButtonVisible() {
+  console.log("fired");
+
+  if (checkVisible(document.getElementById("footer"))) {
+    $("#scrollDownButton").hide(200);    
+  } else {
+    $("#scrollDownButton").show(200);
+  }
+}
