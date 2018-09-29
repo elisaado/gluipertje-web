@@ -1,5 +1,5 @@
 let gluipertje = new Gluipertje({host: "https://gluipertje.elisaado.com", port: 443});
-// let gluipertje = new Gluipertje("http://0.0.0.0", 8000); // Test server
+// let gluipertje = new Gluipertje({host: "http://localhost", port: 3000});
 
 let rf = new IntlRelativeFormat('en-US');
 
@@ -86,22 +86,15 @@ function checkUsername() {
     return;
   }
 
-  gluipertje.getAllUsers()
-    .then((users) => {
-      let a = true;
-      for (let user of users) {
-        if (user.username == $("#registerUsername").val()) {
-          a = false;
-        }
-      }
-
-      if (a) {
-        $("#alertText").html("This username is available");
-        $("#alert").addClass("alert-success");
-      } else {
-        $("#alertText").html("This username is not available");
-        $("#alert").addClass("alert-danger");
-      }
+  gluipertje.getUserByUsername($("#registerUsername").val())
+    .then((user) => {
+      $("#alertText").html("This username is not available");
+      $("#alert").addClass("alert-danger");
+      $("#alert").alert();
+    })
+    .catch(() => {
+      $("#alertText").html("This username is available");
+      $("#alert").addClass("alert-success");
       $("#alert").alert();
     });
 }
@@ -239,18 +232,14 @@ function refreshMessages(callb) {
 
 $(document).ready(function() {
   let token = localStorage.getItem("token");
+  let interval;
+  if (token) {
   gluipertje.getUserByToken(token)
     .then((user) => {
       if (user.id) {
         app.user = user;
         $("#messageButton").click(sendMessage);
         interval = 1000;
-      } else {
-        localStorage.clear();
-        $("#userDropdown").hide();
-        $("#loginModal").modal();
-        $("#messageInput, #messageButton").prop("disabled", true);
-        interval = 2000;
       }
 
       // Only fetch messages once in the begin
@@ -258,8 +247,17 @@ $(document).ready(function() {
         setTimeout(refreshMessagesInterval = setInterval(refreshMessages, interval), interval);
       });
     });
-
-  $("#alert, #loginAlert, #scrollDownButton").hide();
+  } else {
+        localStorage.clear();
+        $("#userDropdown").hide();
+        $("#loginModal").modal();
+        $("#messageInput, #messageButton").prop("disabled", true);
+        interval = 2000;
+        refreshMessages(() => {
+        setTimeout(refreshMessagesInterval = setInterval(refreshMessages, interval), interval);
+      });
+  }
+    $("#alert, #loginAlert, #scrollDownButton").hide();
 });
 
 function scrollDown() {
