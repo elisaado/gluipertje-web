@@ -125,8 +125,12 @@ function register() {
 
 // "Logs in"
 function login() {
+  let token;
   gluipertje.revokeToken({username: $("#loginUsername").val(), password: $("#loginPassword").val()})
-    .then((token) => gluipertje.getUserByToken(token))
+    .then((user) => {
+      token = user.token;
+      return gluipertje.getUserByToken(user.token);
+    })
     .then((user) => {
       if (!user.id) {
         if (user == "Invalid token") {
