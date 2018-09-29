@@ -25,3 +25,7 @@
 .btn-link:hover {
   color: #1E8D9F !important;
 }
+
+img {
+  max-width: 400px;
+}

@@ -1,5 +1,15 @@
-let gluipertje = new Gluipertje({host: "https://gluipertje.elisaado.com", port: 443});
-// let gluipertje = new Gluipertje({host: "http://localhost", port: 3000});
+// BEFORE EVERYTHING:
+var style = document.createElement('style');
+style.type = 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = `img {max-width: ${window.innerWidth - 100}px}`;
+} else {
+  style.appendChild(document.createTextNode(`img {max-width: ${window.innerWidth - 100}px}`));
+}
+document.getElementsByTagName('head')[0].appendChild(style);
+
+// let gluipertje = new Gluipertje({host: "https://gluipertje.elisaado.com", port: 443});
+let gluipertje = new Gluipertje({host: "http://192.168.188.112", port: 3000});
 
 let rf = new IntlRelativeFormat('en-US');
 
@@ -106,7 +116,7 @@ function register() {
 
   gluipertje.createUser({nickname: $("#registerNickname").val(), username: $("#registerUsername").val(), password: $("#registerPassword").val()})
   .then((user) => {
-    gluipertje.getUserByToken(user.token)
+      gluipertje.getUserByToken(user.token)
       .then((safeUser) => {
         if (!safeUser.id) {
           return false;
@@ -212,7 +222,30 @@ function refreshMessages(callb) {
           messageDate = rf.format(rawMessage.created_at);
         }
 
-        messages.push(`<div class="card mx-4"><div class="card-body text-left"><h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5><h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6><br><p class="card-text">${rawMessage.text}</p></div><div class="card-footer text-muted">${messageDate}</div></div><br>`);
+        let content;
+        if (rawMessage.type === "text") {
+          content = `<p class="card-text">${rawMessage.text}</p>`;
+        } else if (rawMessage.type === "image") {
+          let caption = "";
+          if (rawMessage.text.length > 0) caption = `<br>${rawMessage.text}`;
+          content = `
+          <p class="card-text">
+            <img src="${rawMessage.src}">
+            ${caption}
+          </p>`;
+        }
+
+        messages.push(`
+          <div class="card mx-4">
+            <div class="card-body text-left">
+              <h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6>
+              <br>
+              ${content}
+            </div>
+            <div class="card-footer text-muted">${messageDate}</div>
+          </div>
+          <br>`);
       }
 
       // Check if there are new messages
