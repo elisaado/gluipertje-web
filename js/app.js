@@ -8,8 +8,8 @@ if (style.styleSheet) {
 }
 document.getElementsByTagName('head')[0].appendChild(style);
 
-// let gluipertje = new Gluipertje({host: "https://gluipertje.elisaado.com", port: 443});
-let gluipertje = new Gluipertje({host: "http://192.168.188.112", port: 3000});
+let gluipertje = new Gluipertje({host: "https://gluipertje.elisaado.com", port: 443});
+// let gluipertje = new Gluipertje({host: "http://192.168.188.112", port: 3000});
 
 let rf = new IntlRelativeFormat('en-US');
 
