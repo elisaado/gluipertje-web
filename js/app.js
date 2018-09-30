@@ -206,7 +206,7 @@ function refreshMessages(callb) {
         rawMessage.text = words.join(" ").replace(/\\n/g, "<br>")
         let messageDate = "";
         if ((new Date().getTime() / 1000) - rawMessage.created_at.getTime() / 1000 > 60 * 60 * 24 * 7) {
-          messageDate = rawMessage.created_at.toDateString();
+          messageDate = rawMessage.created_at.toLocaleString();
         } else {
           messageDate = rf.format(rawMessage.created_at);
         }
@@ -224,10 +224,11 @@ function refreshMessages(callb) {
           </p>`;
         }
 
+        console.log(`showUserInfo("${escapeHtml(rawMessage.from.username)}");return false;`);
         messages.push(`
           <div class="card mx-4">
             <div class="card-body text-left">
-              <a onclick="showUserInfo(${escapeHtml(rawMessage.from.username)});return false;" href="#" class="ntd">
+              <a onclick="showUserInfo('${escapeHtml(rawMessage.from.username)}');return false;" href="#" class="ntd">
                 <h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6>
               </a>
@@ -300,7 +301,16 @@ function scrollDown() {
   }, 1000);
 }
 
-function showUserInfo() {
+function showUserInfo(username) {
+  gluipertje.getUserByUsername(username)
+    .then(user => {
+      $('#info_usernick').text(user.nickname)
+      $('#info_usernick_body').text(user.nickname)
+      $('#info_username').text(user.username)
+      $('#info_createdat').text(user.created_at.toLocaleString())
+
+      $("#userInfoModal").modal();
+    });
 
   return false;
 }

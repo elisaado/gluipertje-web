@@ -9,3 +9,7 @@ img {
 .append {
   margin-left: 10px;
 }
+
+.ntd {
+  text-decoration: none !important;
+}
