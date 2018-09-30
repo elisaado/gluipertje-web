@@ -303,3 +303,18 @@ function scrollDown() {
     scrollTop: $(document).height() * app.messages.length
   }, 1000);
 }
+
+
+// move this later or smth idk
+// $("#imageInput").on('change', (x, y, z) => {
+
+      //   console.log(x, y, z)   // });
+// submit image
+async function sendImage({image, text}) {
+  let body = new FormData()
+  body.append('token', localStorage.getItem("token"));
+  body.append('text', text);
+  body.append('image', image);
+
+  return fetch(`${gluipertje.baseurl}/images`, {method: 'POST', body})
+}

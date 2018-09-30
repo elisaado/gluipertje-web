@@ -1,31 +1,11 @@
-.btn-primary {
-  background-color: #17a2b8 !important;
-  border-color: #17a2b8 !important;
-}
-
-.btn-primary:hover {
-  color: white !important;
-  background-color: #1E8D9F !important;
-}
-
-.btn-outline-primary {
-  color: #17a2b8 !important;
-  border-color: #17a2b8 !important;
-}
-
-.btn-outline-primary:hover {
-  color: white !important;
-  background-color: #17a2b8 !important;
-}
-
-.btn-link {
-  color: #17a2b8 !important;
-}
-
-.btn-link:hover {
-  color: #1E8D9F !important;
-}
-
 img {
   max-width: 400px;
+}
+
+.prepend {
+  margin-right: 10px;
+}
+
+.append {
+  margin-left: 10px;
 }
