@@ -230,7 +230,7 @@ function refreshMessages(callb) {
             <div class="card-body text-left">
               <a onclick="showUserInfo('${escapeHtml(rawMessage.from.username)}');return false;" href="#" class="ntd">
                 <h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6>
+                <h6 class="card-subtitle mb-2 text-muted">@${escapeHtml(rawMessage.from.username)}</h6>
               </a>
               <br>
               ${content}
