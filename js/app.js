@@ -8,8 +8,8 @@ if (style.styleSheet) {
 }
 document.getElementsByTagName('head')[0].appendChild(style);
 
-let gluipertje = new Gluipertje({host: "https://gluipertje.elisaado.com", port: 443});
-// let gluipertje = new Gluipertje({host: "http://192.168.188.112", port: 3000});
+let gluipertje = new Gluipertje({ host: "https://gluipertje.elisaado.com", port: 443 });
+// let gluipertje = new Gluipertje({ host: "http://192.168.188.112", port: 3000 });
 
 let rf = new IntlRelativeFormat('en-US');
 
@@ -75,17 +75,6 @@ $("#messageInput").keyup(function(e) {
 // fetch messages interval so I can later clear it again
 let refreshMessagesInterval;
 
-// Checks if an item exists in the local storage
-function checkForItemInStorage(item) {
-  if (typeof(Storage) === "undefined") {
-    return false;
-  }
-  if (!localStorage.getItem(item)) {
-    return false;
-  }
-  return true;
-}
-
 // Checks if a username is available
 function checkUsername() {
   $("#alert").show();
@@ -114,36 +103,36 @@ function checkUsername() {
 function register() {
   checkUsername();
 
-  gluipertje.createUser({nickname: $("#registerNickname").val(), username: $("#registerUsername").val(), password: $("#registerPassword").val()})
-  .then((user) => {
+  gluipertje.createUser({ nickname: $("#registerNickname").val(), username: $("#registerUsername").val(), password: $("#registerPassword").val() })
+    .then((user) => {
       gluipertje.getUserByToken(user.token)
-      .then((safeUser) => {
-        if (!safeUser.id) {
-          return false;
-        }
-        app.user = safeUser;
-        localStorage.setItem("token", user.token);
-        $("#userDropdown").show();
-        $("#messageInput, #messageButton").prop("disabled", false);
-        clearInterval(refreshMessagesInterval);
-        refreshMessagesInterval = setInterval(refreshMessages, 1000);
-        $("#messageButton").click(sendMessage);
-        $("#loginModal").modal("hide");
-      });
-  });
+        .then((safeUser) => {
+          if (!safeUser.id) {
+            return false;
+          }
+          app.user = safeUser;
+          localStorage.setItem("token", user.token);
+          $("#userDropdown").show();
+          $("#messageInput, #messageButton").prop("disabled", false);
+          clearInterval(refreshMessagesInterval);
+          refreshMessagesInterval = setInterval(refreshMessages, 1000);
+          $("#messageButton").click(sendMessage);
+          $("#loginModal").modal("hide");
+        });
+    });
 }
 
 // "Logs in"
 function login() {
   let token;
-  gluipertje.revokeToken({username: $("#loginUsername").val(), password: $("#loginPassword").val()})
+  gluipertje.revokeToken({ username: $("#loginUsername").val(), password: $("#loginPassword").val() })
     .then((user) => {
       token = user.token;
       return gluipertje.getUserByToken(user.token);
     })
     .then((user) => {
       if (!user.id) {
-        if (user == "Invalid token") {
+        if (user == "Invalid token" || user == "User not found") {
           $("#loginAlertText").html("The username and password do not match");
           $("#loginAlert").addClass("alert-danger");
         }
@@ -175,7 +164,7 @@ function sendMessage() {
   if (app.user.id == 0 || !localStorage.getItem("token") || $("#messageInput").val().length == 0) {
     return false;
   }
-  gluipertje.sendMessage({token: localStorage.getItem("token"), text: $("#messageInput").val().replace(/\n/g, "\\n")});
+  gluipertje.sendMessage({ token: localStorage.getItem("token"), text: $("#messageInput").val().replace(/\n/g, "\\n") });
 
   refreshMessages(); // :)
 
@@ -216,7 +205,7 @@ function refreshMessages(callb) {
 
         rawMessage.text = words.join(" ").replace(/\\n/g, "<br>")
         let messageDate = "";
-        if((new Date().getTime() / 1000) - rawMessage.created_at.getTime() / 1000 > 60*60*24*7) {
+        if ((new Date().getTime() / 1000) - rawMessage.created_at.getTime() / 1000 > 60 * 60 * 24 * 7) {
           messageDate = rawMessage.created_at.toDateString();
         } else {
           messageDate = rf.format(rawMessage.created_at);
@@ -238,14 +227,16 @@ function refreshMessages(callb) {
         messages.push(`
           <div class="card mx-4">
             <div class="card-body text-left">
-              <h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6>
+              <a onclick="showUserInfo(${escapeHtml(rawMessage.from.username)});return false;" href="#" class="ntd">
+                <h5 class="card-title">${escapeHtml(rawMessage.from.nickname)}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">(@${escapeHtml(rawMessage.from.username)})</h6>
+              </a>
               <br>
               ${content}
             </div>
             <div class="card-footer text-muted">${messageDate}</div>
           </div>
-          <br>`);
+          <br>`); // i'm sorry everyone
       }
 
       // Check if there are new messages
@@ -271,31 +262,36 @@ $(document).ready(function() {
   let token = localStorage.getItem("token");
   let interval;
   if (token) {
-  gluipertje.getUserByToken(token)
-    .then((user) => {
-      if (user.id) {
-        app.user = user;
-        $("#messageButton").click(sendMessage);
-        interval = 1000;
-      }
+    gluipertje.getUserByToken(token)
+      .then((user) => {
+        if (user.id) {
+          app.user = user;
+          $("#messageButton").click(sendMessage);
+          interval = 1000;
+        }
 
-      // Only fetch messages once in the begin
-      refreshMessages(() => {
-        setTimeout(refreshMessagesInterval = setInterval(refreshMessages, interval), interval);
-      });
-    });
-  } else {
-        localStorage.clear();
-        $("#userDropdown").hide();
-        $("#loginModal").modal();
-        $("#messageInput, #messageButton").prop("disabled", true);
-        interval = 2000;
+        // Only fetch messages once in the begin
         refreshMessages(() => {
-        setTimeout(refreshMessagesInterval = setInterval(refreshMessages, interval), interval);
-      });
+          setTimeout(refreshMessagesInterval = setInterval(refreshMessages, interval), interval);
+        });
+      })
+      .catch(noToken);
+  } else {
+    noToken();
   }
-    $("#alert, #loginAlert, #scrollDownButton").hide();
+  $("#alert, #loginAlert, #scrollDownButton").hide();
 });
+
+function noToken() {
+  localStorage.clear();
+  $("#userDropdown").hide();
+  $("#loginModal").modal();
+  $("#messageInput, #messageButton").prop("disabled", true);
+  interval = 2000;
+  refreshMessages(() => {
+    setTimeout(refreshMessagesInterval = setInterval(refreshMessages, interval), interval);
+  });
+}
 
 function scrollDown() {
   // Check if the user is already at the bottom of the page so that if they are reading older messages it doesn't scroll down when a new message appears
@@ -304,17 +300,21 @@ function scrollDown() {
   }, 1000);
 }
 
+function showUserInfo() {
+
+  return false;
+}
 
 // move this later or smth idk
 // $("#imageInput").on('change', (x, y, z) => {
 
-      //   console.log(x, y, z)   // });
+//   console.log(x, y, z)   // });
 // submit image
-async function sendImage({image, text}) {
+async function sendImage({ image, text }) {
   let body = new FormData()
   body.append('token', localStorage.getItem("token"));
   body.append('text', text);
   body.append('image', image);
 
-  return fetch(`${gluipertje.baseurl}/images`, {method: 'POST', body})
+  return fetch(`${gluipertje.baseurl}/images`, { method: 'POST', body })
 }
