@@ -2,9 +2,9 @@
 var style = document.createElement('style');
 style.type = 'text/css';
 if (style.styleSheet) {
-  style.styleSheet.cssText = `img {max-width: ${window.innerWidth - 100}px}`;
+  style.styleSheet.cssText = `img {max-width: ${window.innerWidth - 100}px !important}`;
 } else {
-  style.appendChild(document.createTextNode(`img {max-width: ${window.innerWidth - 100}px}`));
+  style.appendChild(document.createTextNode(`img {max-width: ${window.innerWidth - 100}px !important}`));
 }
 document.getElementsByTagName('head')[0].appendChild(style);
 
@@ -113,7 +113,9 @@ function register() {
           app.user = safeUser;
           localStorage.setItem("token", user.token);
           $("#userDropdown").show();
-          $("#messageInput, #messageButton").prop("disabled", false);
+          $("#messageInput, #messageButton, #fileButton, #emojiButton, #imageInput").prop("disabled", false);
+          $("#messageInput, #messageButton, #fileButton, #emojiButton, #imageInput").removeClass("disabled");
+
           clearInterval(refreshMessagesInterval);
           refreshMessagesInterval = setInterval(refreshMessages, 1000);
           $("#messageButton").click(sendMessage);
@@ -144,7 +146,9 @@ function login() {
       app.user = user;
       localStorage.setItem("token", token);
       $("#userDropdown").show();
-      $("#messageInput, #messageButton").prop("disabled", false);
+      $("#messageInput, #messageButton, #fileButton, #emojiButton, #imageInput").prop("disabled", false);
+      $("#messageInput, #messageButton, #fileButton, #emojiButton, #imageInput").removeClass("disabled");
+
       clearInterval(refreshMessagesInterval);
       refreshMessagesInterval = setInterval(refreshMessages, 1000);
       $("#messageButton").click(sendMessage);
@@ -287,7 +291,8 @@ function noToken() {
   localStorage.clear();
   $("#userDropdown").hide();
   $("#loginModal").modal();
-  $("#messageInput, #messageButton").prop("disabled", true);
+  $("#messageInput, #messageButton, #fileButton, #emojiButton, #imageInput").prop("disabled", true);
+  $("#messageInput, #messageButton, #fileButton, #emojiButton, #imageInput").addClass("disabled");
   interval = 2000;
   refreshMessages(() => {
     setTimeout(refreshMessagesInterval = setInterval(refreshMessages, interval), interval);
