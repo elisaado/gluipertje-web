@@ -1,13 +1,3 @@
-// BEFORE EVERYTHING:
-var style = document.createElement('style');
-style.type = 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = `img {max-width: ${window.innerWidth - 100}px !important}`;
-} else {
-  style.appendChild(document.createTextNode(`img {max-width: ${window.innerWidth - 100}px !important}`));
-}
-document.getElementsByTagName('head')[0].appendChild(style);
-
 let gluipertje = new Gluipertje({ host: "https://gluipertje.elisaado.com", port: 443 });
 // let gluipertje = new Gluipertje({ host: "http://192.168.188.112", port: 3000 });
 
@@ -37,6 +27,11 @@ let app = new Vue({
     $(window).scroll(
       scrollDownButtonVisible
     );
+  },
+  updated: function() {
+    this.$nextTick(function() {
+      Intense($('.intensify'))
+    })
   }
 });
 
@@ -215,20 +210,22 @@ function refreshMessages(callb) {
           messageDate = rf.format(rawMessage.created_at);
         }
 
-        let content;
-        if (rawMessage.type === "text") {
-          content = `<p class="card-text">${rawMessage.text}</p>`;
-        } else if (rawMessage.type === "image") {
-          let caption = "";
-          if (rawMessage.text.length > 0) caption = `<br>${rawMessage.text}`;
-          content = `
-          <p class="card-text">
-            <img src="${rawMessage.src}">
-            ${caption}
-          </p>`;
+        let content = $('<p>');
+
+        content.addClass('card-text');
+
+        if (rawMessage.type === "image") {
+          let img = $('<img>');
+          img.attr('src', rawMessage.src);
+          img.addClass('intensify');
+
+          content.append(img);
+          if (rawMessage.text.length > 0) content.append(document.createElement('br'));
         }
 
-        console.log(`showUserInfo("${escapeHtml(rawMessage.from.username)}");return false;`);
+        content.append(rawMessage.text)
+        content = content.html()
+
         messages.push(`
           <div class="card mx-4">
             <div class="card-body text-left">
@@ -260,8 +257,8 @@ function refreshMessages(callb) {
         callb();
       }
     });
-}
 
+}
 
 $(document).ready(function() {
   let token = localStorage.getItem("token");
@@ -284,6 +281,7 @@ $(document).ready(function() {
   } else {
     noToken();
   }
+
   $("#alert, #loginAlert, #scrollDownButton").hide();
 });
 
@@ -321,9 +319,27 @@ function showUserInfo(username) {
 }
 
 // move this later or smth idk
-// $("#imageInput").on('change', (x, y, z) => {
+$("#imageInput").on('change', (e) => {
+  $('#image_preview').empty();
+  $("#caption").val('');
 
-//   console.log(x, y, z)   // });
+  let img = document.createElement('img');
+  img.src = URL.createObjectURL(e.target.files[0]);
+  img.style = ""
+
+  $("#image_preview").append(img);
+  $("#imageSendModal").modal();
+
+  $("caption").focus();
+});
+
+function clickSendImage() {
+  sendImage({ image: document.querySelector('#imageInput').files[0], text: $('#caption').val() })
+    .then(() => {
+      $('#imageSendModal').modal('toggle');
+    });
+}
+
 // submit image
 async function sendImage({ image, text }) {
   let body = new FormData()
