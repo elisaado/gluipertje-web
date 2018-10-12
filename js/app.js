@@ -1,5 +1,12 @@
+
 let gluipertje = new Gluipertje({ host: "https://gluipertje.elisaado.com", port: 443 });
 // let gluipertje = new Gluipertje({ host: "http://192.168.188.112", port: 3000 });
+
+var style = document.createElement('style');
+style.type = 'text/css';
+
+style.innerHTML = `.intensify { max-width: ${$(document).width() - 100}px !important; }`;
+document.getElementsByTagName('head')[0].appendChild(style);
 
 let rf = new IntlRelativeFormat('en-US');
 
