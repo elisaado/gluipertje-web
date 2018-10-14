@@ -2,102 +2,102 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Gluipertje web app">
-  <link rel="stylesheet" href="css/custom.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css">
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/intl-relativeformat@2.1.0/dist/intl-relativeformat.min.js"></script>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-  <script src="js/intense.min.js"></script>
-  <title>Gluipertje Web</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Gluipertje web app">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/intl-relativeformat@2.1.0/dist/intl-relativeformat.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script src="js/intense.min.js"></script>
+    <title>Gluipertje Web</title>
 </head>
 
 <body>
-  <div id="app" v-on:scroll="scrollDownButtonVisible">
-    <!-- login modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">You are not logged in</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            To send messages, you need to log in first.
-            <hr>
-            <div id="accordion">
-              <div>
-                <div class="card-header" id="headingOne">
-                  <h5 class="mb-0">
+    <div id="app" v-on:scroll="scrollDownButtonVisible">
+        <!-- login modal -->
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">You are not logged in</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        To send messages, you need to log in first.
+                        <hr>
+                        <div id="accordion">
+                            <div>
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                     Log In
                     </button>
                     </h5>
-                </div>
-                <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                  <div class="card-body">
-                    <div class="alert mb-3" id="loginAlert" role="alert">
-                      <div id="loginAlertText"></div>
-                    </div>
-                    <form>
-                      <input placeholder="Username" type="text" class="form-control mb-3" id="loginUsername">
-                      <input placeholder="Password" type="password" class="form-control mb-3" id="loginPassword">
-                    </form>
-                    <button type="button" class="btn btn-primary" id="submitLogin" onclick="login()">Log in</button>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div class="card-header" id="headingTwo">
-                  <h5 class="mb-0">
+                                </div>
+                                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="alert mb-3" id="loginAlert" role="alert">
+                                            <div id="loginAlertText"></div>
+                                        </div>
+                                        <form>
+                                            <input placeholder="Username" type="text" class="form-control mb-3" id="loginUsername">
+                                            <input placeholder="Password" type="password" class="form-control mb-3" id="loginPassword">
+                                        </form>
+                                        <button type="button" class="btn btn-primary" id="submitLogin" onclick="login()">Log in</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="card-header" id="headingTwo">
+                                    <h5 class="mb-0">
                     <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                     Register
                     </button>
                     </h5>
-                </div>
-                <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                  <div class="card-body">
-                    <div class="alert mb-3" id="alert" role="alert">
-                      <div id="alertText"></div>
-                    </div>
-                    <form>
-                      <input placeholder="Nickname" type="text" class="form-control mb-3" id="registerNickname">
-                      <div class="input-group mb-3">
-                        <input placeholder="Username" type="text" class="form-control" id="registerUsername">
-                        <div class="input-group-append">
-                          <button onclick="checkUsername()" class="btn btn-outline-secondary" type="button">Check availability</button>
+                                </div>
+                                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="alert mb-3" id="alert" role="alert">
+                                            <div id="alertText"></div>
+                                        </div>
+                                        <form>
+                                            <input placeholder="Nickname" type="text" class="form-control mb-3" id="registerNickname">
+                                            <div class="input-group mb-3">
+                                                <input placeholder="Username" type="text" class="form-control" id="registerUsername">
+                                                <div class="input-group-append">
+                                                    <button onclick="checkUsername()" class="btn btn-outline-secondary" type="button">Check availability</button>
+                                                </div>
+                                            </div>
+                                            <input placeholder="Password" type="password" class="form-control mb-3" id="registerPassword">
+                                        </form>
+                                        <button type="button" class="btn btn-primary" id="submitLogin" onclick="register()">Register</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <input placeholder="Password" type="password" class="form-control mb-3" id="registerPassword">
-                    </form>
-                    <button type="button" class="btn btn-primary" id="submitLogin" onclick="register()">Register</button>
-                  </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-    <!-- Scroll down button -->
-    <button id="scrollDownButton" onclick="scrollDown()" style="position:fixed;bottom:50px;right:20px;margin:0 auto;padding:5px 3px;z-index: 100;padding: 6px 0px;display: table-cell;vertical-align: middle;" class="btn btn-primary bmd-btn-fab" type="button" href="#"><span class="oi oi-arrow-thick-bottom"></span></button>
-    <!-- header -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-primary">
-      <a class="navbar-brand" href="#"><img src="img/gluipfadelogo256x256.gif" width="40" height="40" alt="Gluipertje"></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mr-auto"></ul>
-        <span class="dropdown navbar-text">
+        <!-- Scroll down button -->
+        <button id="scrollDownButton" onclick="scrollDown()" style="position:fixed;bottom:50px;right:20px;margin:0 auto;padding:5px 3px;z-index: 100;padding: 6px 0px;display: table-cell;vertical-align: middle;" class="btn btn-primary bmd-btn-fab" type="button" href="#"><span class="oi oi-arrow-thick-bottom"></span></button>
+        <!-- header -->
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-primary">
+            <a class="navbar-brand" href="#"><img src="img/gluipfadelogo256x256.gif" width="40" height="40" alt="Gluipertje"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav mr-auto"></ul>
+                <span class="dropdown navbar-text">
           <div class="pull-right">
             <ul class="nav">
               <li class="dropdown show">
@@ -110,83 +110,80 @@
             </ul>
           </div>
         </span>
-      </div>
-    </nav>
-    <br>
-    <!-- Messages -->
-    <div class="text-center mx-auto" id="messages" v-for="message in messages">
-      <div class="text-center mx-auto" id="message" v-html="message"></div>
-    </div>
-    <!-- footer / message input box -->
-    <nav id="footer" class="navbar navbar-light bg-light">
-      <form class="mx-2 my-auto d-inline w-100">
-        <div class="input-group">
-          <label id="fileButton" class="btn btn-primary prepend"><i class="material-icons">image</i><input type="file" id="imageInput" hidden></label>
-          <textarea id="messageInput" class="form-control" placeholder="Message"></textarea>
-          <button id="emojiButton" class="btn btn-primary" type="button"><i class="material-icons">insert_emoticon</i></button>
-          <button id="messageButton" class="btn btn-primary" type="button"><i class="material-icons">send</i></button>
+            </div>
+        </nav>
+        <br>
+        <!-- Messages -->
+        <div class="text-center mx-auto" id="messages" v-for="message in messages">
+            <div class="text-center mx-auto" id="message" v-html="message"></div>
         </div>
-      </form>
-    </nav>
-    <!-- Image sending modal -->
-    <div class="modal fade" id="imageSendModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="">Image</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <hr style="margin-top: 0px;">
-            <p class="center">
-              <div id="image_preview"></div>
-            </p>
-            <p>
-              <input class="form-control" type="text" name="caption" id="caption" placeholder="Caption">
-            </p>
-            <button class="btn btn-primary" onclick="clickSendImage(); return false;">Send</button>
-          </div>
+        <!-- footer / message input box -->
+        <nav id="footer" class="navbar navbar-light bg-light">
+            <form class="mx-2 my-auto d-inline w-100">
+                <div class="input-group">
+                    <label id="fileButton" class="btn btn-primary prepend"><i class="material-icons">image</i><input type="file" id="imageInput" hidden></label>
+                    <textarea id="messageInput" class="form-control" placeholder="Message"></textarea>
+                    <button id="emojiButton" class="btn btn-primary" type="button"><i class="material-icons">insert_emoticon</i></button>
+                    <button id="messageButton" class="btn btn-primary" type="button"><i class="material-icons">send</i></button>
+                </div>
+            </form>
+        </nav>
+        <!-- Image sending modal -->
+        <div class="modal fade" id="imageSendModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Image</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <hr style="margin-top: 0px;">
+                        <p class="center">
+                            <div id="image_preview"></div>
+                        </p>
+                        <p>
+                            <input class="form-control" type="text" name="caption" id="caption" placeholder="Caption">
+                        </p>
+                        <button class="btn btn-primary" onclick="clickSendImage(); return false;">Send</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <!-- User info modal -->
-    <div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="info_usernick"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <hr style="margin-top: 0px;">
-            <p>
-              <div id="info_usernick_body"></div>
-              <div class="text-muted">Nickname</div>
-            </p>
-            <p>
-              <div id="info_username"></div>
-              <div class="text-muted">Username</div>
-            </p>
-            <p>
-              <div id="info_createdat"></div>
-              <div class="text-muted">Joined</div>
-            </p>
-          </div>
+        <!-- User info modal -->
+        <div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="info_usernick"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <hr style="margin-top: 0px;">
+                        <p>
+                            <div id="info_usernick_body"></div>
+                            <div class="text-muted">Nickname</div>
+                        </p>
+                        <p>
+                            <div id="info_username"></div>
+                            <div class="text-muted">Username</div>
+                        </p>
+                        <p>
+                            <div id="info_createdat"></div>
+                            <div class="text-muted">Joined</div>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-  <script type="text/javascript" src="js/Gluipertje.js/gluipertje.js"></script>
-  <script type="text/javascript" src="js/app.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript" src="js/Gluipertje.js/gluipertje.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
 </body>
 
 </html>
